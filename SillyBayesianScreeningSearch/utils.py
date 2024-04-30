@@ -1,4 +1,3 @@
-import numpy as np
 import math
 
 
@@ -45,3 +44,51 @@ def get_BAC_capacity(tau: float, alpha: float) -> float:
     add_2 = (tau - alpha) / (2 * alpha) * binary_entropy(tau + alpha)
     add_3 = -(tau + alpha) / (2 * alpha) * binary_entropy(tau - alpha)
     return add_1 + add_2 + add_3
+
+
+def get_d00(tau: float, alpha: float) -> float:
+    assert 0 <= tau <= 1
+    assert 0 <= alpha <= 1
+    assert tau - alpha >= 0
+    assert tau + alpha <= 1
+
+    q = get_q(tau, alpha)
+    num = 1 - tau - alpha
+    den = 1 - tau - (2 * q - 1) * alpha
+    return num / den
+
+
+def get_d01(tau: float, alpha: float) -> float:
+    assert 0 <= tau <= 1
+    assert 0 <= alpha <= 1
+    assert tau - alpha >= 0
+    assert tau + alpha <= 1
+
+    q = get_q(tau, alpha)
+    num = 1 - tau + alpha
+    den = 1 - tau - (2 * q - 1) * alpha
+    return num / den
+
+
+def get_d10(tau: float, alpha: float) -> float:
+    assert 0 <= tau <= 1
+    assert 0 <= alpha <= 1
+    assert tau - alpha >= 0
+    assert tau + alpha <= 1
+
+    q = get_q(tau, alpha)
+    num = tau + alpha
+    den = tau + (2 * q - 1) * alpha
+    return num / den
+
+
+def get_d11(tau: float, alpha: float) -> float:
+    assert 0 <= tau <= 1
+    assert 0 <= alpha <= 1
+    assert tau - alpha >= 0
+    assert tau + alpha <= 1
+
+    q = get_q(tau, alpha)
+    num = tau - alpha
+    den = tau + (2 * q - 1) * alpha
+    return num / den
