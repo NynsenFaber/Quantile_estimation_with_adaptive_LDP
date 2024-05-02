@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 
 def binary_entropy(p: float) -> float:
@@ -24,7 +25,7 @@ def get_q(tau: float, alpha: float) -> float:
     assert tau - alpha >= 0
     assert tau + alpha <= 1
 
-    num = (1 - tau - alpha) - 1 / (1 + get_z(tau, alpha))
+    num = (1 - tau + alpha) - 1 / (1 + get_z(tau, alpha))
     return num / (2 * alpha)
 
 
@@ -92,3 +93,17 @@ def get_d11(tau: float, alpha: float) -> float:
     num = tau - alpha
     den = tau + (2 * q - 1) * alpha
     return num / den
+
+
+def get_coins(L: list) -> list:
+    """
+    Get the coins from the set of intervals.
+    :param L: set of intervals
+    :return: coins
+    """
+    # construct a dictionary containing all the possible coins in L
+    intevals = np.array(L)
+    left_coins = intevals
+    right_coins = intevals + 1
+    coins = set(left_coins).union(set(right_coins))
+    return coins
