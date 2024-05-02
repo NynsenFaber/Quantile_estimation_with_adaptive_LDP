@@ -5,6 +5,7 @@ from .utils import get_q, get_d00, get_d01, get_d10, get_d11
 
 def median_bayes_learn(D: list,
                        alpha: float,
+                       eps: float,
                        M: int,
                        intervals: np.array,
                        replacement: bool = False) -> tuple[np.array, dict, list]:
@@ -15,6 +16,7 @@ def median_bayes_learn(D: list,
     probabilities
     :param D: dataset of values in [B]
     :param alpha: target error
+    :param eps: privacy parameter
     :param M: steps (samples)
     :param intervals: list of intervals
     :param replacement: with (True) / without (False) replacement
@@ -26,6 +28,10 @@ def median_bayes_learn(D: list,
     assert 0 <= M <= len(D)
     D = list(D)
 
+    # generate bernoulli coins with probability np.exp(eps) / (1 + np.exp(eps))
+    eps = np.clip(eps, 0.00001, 100)  # for stability
+    random_coin = np.random.binomial(1, np.exp(eps) / (1 + np.exp(eps)), M)
+
     # define uniform prior
     w: np.array = np.ones(len(intervals)) / (len(intervals))
     # create array for the visited intervals
@@ -34,7 +40,6 @@ def median_bayes_learn(D: list,
     coins_count = defaultdict(lambda: [0, 0])
 
     for i in range(M):
-
         # get the median interval and closest coin of the weights
         interval_index, coin_index = get_interval_coin_from_quantile(w, 0.5)
         j_i = intervals[interval_index]
@@ -51,6 +56,9 @@ def median_bayes_learn(D: list,
 
         # flip the coin
         y_i = flip_coin(coin=x_i, sample=sample)
+
+        # apply randomized response to the coin flip
+        y_i = RR(y_i, random_coin[i])
 
         # update the histogram by adding the result of the coin flip
         coins_count[x_i][1] += y_i
@@ -206,3 +214,21 @@ def sample_element(D: list, replacement):
         del D[sample_index]
     return sample
 
+
+def RR(A: int, B: int) -> int:
+    """
+    Given the result of coin A and the reuslt of DP coin due to randomized response B, we return the private coin
+    Truth Table:
+    A  B  result
+    0  0  1
+    0  1  0
+    1  0  0
+    1  1  1
+    So if the DP coin is zero we flip coin A, otherwise we keep the result of coin A
+    :param A:
+    :param B:
+    :return:
+    """
+    A = bool(A)
+    B = bool(B)
+    return int((A and B) or (not A and not B))

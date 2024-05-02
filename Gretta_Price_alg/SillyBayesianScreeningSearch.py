@@ -7,6 +7,7 @@ import time
 
 def median_bayesian_screening_search(D: np.array,
                                      alpha: float,
+                                     eps: float,
                                      M: int,
                                      intervals: np.array,
                                      replacement: bool = False,
@@ -15,6 +16,7 @@ def median_bayesian_screening_search(D: np.array,
     Algorithm developed by Gretta-Price
     :param D:
     :param alpha:
+    :param eps:
     :param M:
     :param intervals:
     :param replacement:
@@ -34,7 +36,7 @@ def median_bayesian_screening_search(D: np.array,
     gamma = 1 / (np.log(B) ** 2)
 
     # get the intervals from the Bayesian learning
-    R, D, L, H = reduction_to_gamma(D, alpha_bayes, M_bayes_1, intervals, replacement, gamma)
+    R, D, L, H = reduction_to_gamma(D, alpha_bayes, M_bayes_1, intervals, replacement, gamma, eps)
     if len(R) > 13:
         # print(f"Bayesian learning found {len(R)} intervals, running a second Bayesian learning")
         flag = True
@@ -48,7 +50,7 @@ def median_bayesian_screening_search(D: np.array,
         R = np.insert(R, len(R), [max_R, intervals[-1][1]], axis=0)
 
         gamma = 1 / 13
-        R, D, L, H = reduction_to_gamma(D, alpha_bayes, M_bayes_2, R, replacement, gamma)
+        R, D, L, H = reduction_to_gamma(D, alpha_bayes, M_bayes_2, R, replacement, gamma, eps)
 
     if flag:
         M_sampling = M - M_bayes_1 - M_bayes_2
@@ -71,11 +73,10 @@ def median_bayesian_screening_search(D: np.array,
     return R, L, coins_prob, good_coin
 
 
-def reduction_to_gamma(D, alpha, M, intervals, replacement, gamma):
-
+def reduction_to_gamma(D, alpha, M, intervals, replacement, gamma, eps):
     # run Bayesian learning
     start = time.time()
-    L, H, D = median_bayes_learn(D=D, alpha=alpha, M=M, intervals=intervals, replacement=replacement)
+    L, H, D = median_bayes_learn(D=D, alpha=alpha, eps=eps, M=M, intervals=intervals, replacement=replacement)
     # print(f"Bayesian learning took {time.time() - start} seconds")
 
     # reduction to gamma
@@ -156,3 +157,6 @@ def check_coins(alpha: float, alpha_bayes: float, coins: list, coins_prob: dict[
         # print("No good coins found, selecting a random coin from the quantiles")
         random_good_coin = np.random.choice(list(coins), 1)[0]
     return random_good_coin
+
+
+
