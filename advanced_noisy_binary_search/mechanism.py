@@ -3,13 +3,13 @@ from collections import defaultdict
 from .utils import check_coins, vector_RR
 
 
-def noisy_binary_search(data: np.array,
-                        intervals: np.array,
-                        M: int,
-                        alpha: float,
-                        eps: float,
-                        target: float,
-                        replacement: bool = False) -> int:
+def advanced_noisy_binary_search(data: np.array,
+                                 intervals: np.array,
+                                 M: int,
+                                 alpha: float,
+                                 eps: float,
+                                 target: float,
+                                 replacement: bool = False) -> int:
     """
     Naive Noisy Binary Search algorithm. It returns a coin that is an \alpha/2 good estimate of the target.
     Each coin during the binary search is sampled O(M/log(B)) times, allowing to perform a noisy binary search with O(log(B))

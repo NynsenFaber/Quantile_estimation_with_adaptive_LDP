@@ -1,0 +1,6 @@
+name: LDP_q_est
+dependencies:
+  - python=3.11.9
+  - pip
+  - pip:
+    - -r requirements.txt

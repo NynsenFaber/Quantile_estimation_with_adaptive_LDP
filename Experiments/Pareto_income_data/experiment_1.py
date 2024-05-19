@@ -17,13 +17,15 @@ sys.path.append(grandparent_dir)
 
 # Import the required module from gretta_price_dp
 from gretta_price_dp.mechanism import gretta_price_dp
-from noisy_binary_search.mechanism import noisy_binary_search
+from gretta_price_dp.utils import get_th_alpha
+from naive_noisy_binary_search.mechanism import naive_noisy_binary_search
 from hierarchical_mechanism.mechanism import hierarchical_mechanism_quantile
 from hierarchical_mechanism.data_structure import Tree
 
 # ------------Parameters of the data------------#
 B_exp = 9
 N = 5000
+c = 0.3
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
 # import data
@@ -53,31 +55,30 @@ with open(f'{folder_name}/pareto_cdf.pkl', 'rb') as f:
 # ------------Parameters of the mechanism------------#
 eps_list = np.geomspace(0.1, 5, 10)
 target = 0.5
-alpha = 0.05
+alpha_test = 0.05
 replacement = False
 num_exp = 200
 
 # ------------Noisy Binary Search------------#
-print("Noisy Binary Search")
+print("Naive Noisy Binary Search")
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
 for i, eps in tqdm.tqdm(enumerate(eps_list)):
     for j in range(num_exp):
-        coin = noisy_binary_search(data=data,
-                                   intervals=intervals,
-                                   M=len(data),
-                                   alpha=alpha,
-                                   eps=eps,
-                                   target=target,
-                                   replacement=replacement)
-        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha, median=median)
+        coin = naive_noisy_binary_search(data=data,
+                                         intervals=intervals,
+                                         M=len(data),
+                                         eps=eps,
+                                         target=target,
+                                         replacement=replacement)
+        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha_test, median=median)
         coins[i, j] = coin
         errors[i, j] = err
         success[i, j] = succ
 
 # save results
-folder_name = f"results/noisy_binary_search/N_{N}/B_exp_{B_exp}"
+folder_name = f"results/naive_noisy_binary_search/N_{N}/B_exp_{B_exp}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
@@ -88,10 +89,11 @@ with open(f"{folder_name}/success.pkl", "wb") as f:
     pickle.dump(success, f)
 
 # ------------Gretta Price------------#
-print("Gretta Price")
+print("Gretta Price Optimized")
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
+alpha = get_th_alpha(B=4 ** B_exp, N=N, c=0.3)
 for i, eps in tqdm.tqdm(enumerate(eps_list)):
     for j in range(num_exp):
         coin = gretta_price_dp(data=data,
@@ -101,13 +103,13 @@ for i, eps in tqdm.tqdm(enumerate(eps_list)):
                                eps=eps,
                                target=target,
                                replacement=replacement)
-        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha, median=median)
+        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha_test, median=median)
         coins[i, j] = coin
         errors[i, j] = err
         success[i, j] = succ
 
 # save results
-folder_name = f"results/gretta_price/N_{N}/B_exp_{B_exp}"
+folder_name = f"results/gretta_price_optimized/N_{N}/B_exp_{B_exp}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
@@ -116,6 +118,8 @@ with open(f"{folder_name}/errors.pkl", "wb") as f:
     pickle.dump(errors, f)
 with open(f"{folder_name}/success.pkl", "wb") as f:
     pickle.dump(success, f)
+with open(f"{folder_name}/c.pkl", "wb") as f:
+    pickle.dump(c, f)
 
 # ------------Hierarchical Mechanism------------#
 print("Hierarchical Mechanism")
@@ -133,7 +137,7 @@ for i, eps in tqdm.tqdm(enumerate(eps_list)):
                                                eps=eps,
                                                target=target,
                                                replacement=replacement)
-        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha, median=median)
+        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha_test, median=median)
         coins[i, j] = coin
         errors[i, j] = err
         success[i, j] = succ

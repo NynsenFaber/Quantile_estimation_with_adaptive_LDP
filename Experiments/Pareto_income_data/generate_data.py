@@ -5,19 +5,28 @@ import pickle
 import os
 
 
-def generate_pareto_data(shape, N, scale=2000):
-    D = np.random.pareto(shape, N) * scale
+def generate_pareto_data(shape, N, B_exp):
+    if B_exp >= 8:
+        D = np.random.pareto(shape, N) * 2000
+    elif B_exp == 7:
+        D = np.random.pareto(shape, N) * 500
+    elif B_exp == 6:
+        D = np.random.pareto(shape, N) * 200
+    elif B_exp == 5:
+        D = np.random.pareto(shape, N) * 50
+    else:
+        raise ValueError("B_exp must be greater than or equal to 5")
     return D
 
 
 seed = 42
-N = 5000  # number of samples
-B_exp = 9
+N = 2000  # number of samples
+B_exp = 7
 
 np.random.seed(seed)
 
 # generate the data
-data = generate_pareto_data(1.5, N)
+data = generate_pareto_data(1.5, N, B_exp)
 
 # discretize the data
 num_bins = int(4 ** B_exp)  # Number of bins
@@ -76,4 +85,3 @@ with open(f"{folder_name}/pareto_bins.pkl", "wb") as f:
 # save intervals
 with open(f"{folder_name}/pareto_intervals.pkl", "wb") as f:
     pickle.dump(intervals, f)
-

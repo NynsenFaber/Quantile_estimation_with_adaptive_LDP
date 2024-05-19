@@ -1,7 +1,7 @@
 import numpy as np
 from .bayesian_learning import bayes_learn
 from collections import defaultdict
-from .utils import check_coins, vector_RR
+from .utils import check_coins, vector_RR, naive_noisy_binary_search
 
 
 def gretta_price_dp(data: list,
@@ -10,7 +10,8 @@ def gretta_price_dp(data: list,
                     M: int,
                     intervals: np.array,
                     target: float = 0.5,
-                    replacement: bool = False) -> int:
+                    replacement: bool = False,
+                    naive_NBS: bool = True) -> int:
     """
     Algorithm developed by Gretta-Price. It uses Bayesian learning to reduce the number of intervals. This version works
     with differential privacy and sampling without replacement.
@@ -25,6 +26,8 @@ def gretta_price_dp(data: list,
     :param intervals: list of intervals [[x_1, x_2], [x_2, x_3], ...]
     :param target: target or quantile in (0,1) value
     :param replacement: with (True) / without (False) replacement
+    :param naive_NBS: use the naive noisy binary search (True) for the final step, otherwise use flips all the coins
+        in the final step and return the closest to the target.
 
     :return: the median
     """
@@ -36,10 +39,12 @@ def gretta_price_dp(data: list,
     B = len(coins)
 
     # get the number of samples at for each step of the Bayesian learning
-    M_bayes = int(M * np.log(B) / (np.log(B) + 1))
-    # split the M_bayes in two parts
-    M_bayes_1 = int(M_bayes * np.log(B) / (np.log(B) + 1))
-    M_bayes_2 = M_bayes - M_bayes_1
+    # to have M_bayes_1/M_bayes_2 = log(B)/log(log(B)), M_bayes_1/M_sampling = log(B)
+    # and M_bayes_2/M_sampling = log(log(B))
+    den = np.log(B) + np.log(np.log(B)) + 1
+    M_bayes_1 = int(M * np.log(B) / den)
+    M_bayes_2 = int(M * np.log(np.log(B)) / den)
+
     flag = False  # to keep track if a second Bayesian learning is needed
 
     # define the alpha for the Bayesian learning and the gamma for the reduction
@@ -83,16 +88,24 @@ def gretta_price_dp(data: list,
     else:
         M_sampling = M - M_bayes_1
 
-    # get the empirical cdf of the coins
-    coins_prob = toss_coins(M=M_sampling, intervals=R, D=data, replacement=replacement, eps=eps)
+    if naive_NBS:
+        good_coin = naive_noisy_binary_search(data=data,
+                                              intervals=R,
+                                              M=M_sampling,
+                                              eps=eps,
+                                              target=target,
+                                              replacement=replacement)
+    else:
+        # get the empirical cdf of the coins
+        coins_prob = toss_coins(M=M_sampling, intervals=R, D=data, replacement=replacement, eps=eps)
 
-    # get unbiased estimate of the empirical cdf
-    factor_1 = (np.exp(eps) + 1) / (np.exp(eps) - 1)
-    factor_2 = 1 / (np.exp(eps) + 1)
-    coins_prob = {coin: factor_1 * (prob - factor_2) for coin, prob in coins_prob.items()}
+        # get unbiased estimate of the empirical cdf
+        factor_1 = (np.exp(eps) + 1) / (np.exp(eps) - 1)
+        factor_2 = 1 / (np.exp(eps) + 1)
+        coins_prob = {coin: factor_1 * (prob - factor_2) for coin, prob in coins_prob.items()}
 
-    # check if a coin has a cdf smaller tha tau + alpha and bigger than tau - alpha
-    good_coin = check_coins(alpha=alpha, alpha_bayes=alpha_bayes, intervals=R, coins_prob=coins_prob)
+        # check if a coin has a cdf smaller tha tau + alpha and bigger than tau - alpha
+        good_coin = check_coins(alpha=alpha, alpha_bayes=alpha_bayes, intervals=R, coins_prob=coins_prob)
 
     return good_coin
 
