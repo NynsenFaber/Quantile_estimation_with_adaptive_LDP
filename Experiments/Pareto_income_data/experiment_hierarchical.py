@@ -21,7 +21,7 @@ from hierarchical_mechanism.data_structure import Tree
 
 # ------------Parameters of the data------------#
 B_exp = 9
-N = 2000
+N = 2500
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
 # import data
