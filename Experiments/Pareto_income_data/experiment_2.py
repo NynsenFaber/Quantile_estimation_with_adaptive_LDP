@@ -63,7 +63,7 @@ print(f"Multiplicative factor for theoretical alpha: {c}")
 alpha_test = 0.05
 
 # ------------Parameters of the mechanism------------#
-num_bins_list = np.linspace(10 ** 5, 10 ** 6, 10, dtype=int)
+num_bins_list = np.linspace(10 ** 5, 10 ** 7, 5, dtype=int)
 target = 0.5
 replacement = False
 num_exp = 200
