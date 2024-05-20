@@ -73,7 +73,7 @@ target = 0.5
 replacement = False
 tries = 1
 
-print("BaySS")
+print("--- Find alpha update ---")
 print("N", N)
 print("B_exp", B_exp)
 print("eps", eps)

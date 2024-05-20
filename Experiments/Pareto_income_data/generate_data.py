@@ -21,7 +21,7 @@ def generate_pareto_data(shape, N, B_exp):
 
 seed = 42
 N = 2500  # number of samples
-B_exp = 9
+B_exp = 10
 
 np.random.seed(seed)
 
@@ -38,6 +38,9 @@ data = np.clip(data, 0, num_bins - 1)
 # get the empirical cdf of the coins
 cf = ecdf(data)
 cf_dict = dict(zip(cf.cdf.quantiles, cf.cdf.probabilities))
+cf_dict[0] = 0
+# sort by key
+cf_dict = dict(sorted(cf_dict.items()))
 
 # get the median quantile
 median = None
