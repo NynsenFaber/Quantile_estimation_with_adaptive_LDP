@@ -56,6 +56,10 @@ num_exp = 200
 
 # ------------Noisy Binary Search------------#
 print("Noisy Binary Search")
+print(f"Number of experiments: {num_exp}")
+print(f"Number of data points: {N}")
+print(f"B_exp: {B_exp}")
+
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)

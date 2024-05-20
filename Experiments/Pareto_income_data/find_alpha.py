@@ -73,6 +73,14 @@ target = 0.5
 replacement = False
 tries = 1
 
+print("BaySS")
+print("N", N)
+print("B_exp", B_exp)
+print("eps", eps)
+print("alpha_test", alpha_test)
+print("c_list", c_list)
+print("num_exp", num_exp)
+
 coins = np.zeros((len(c_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(c_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(c_list), num_exp))  # store the success of the mechanism (epsilon, experiment)

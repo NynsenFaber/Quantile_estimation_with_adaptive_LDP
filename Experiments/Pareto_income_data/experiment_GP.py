@@ -24,9 +24,6 @@ B_exp = 10
 N = 2000
 c = 2.0
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
-print("c", c)
-print("N", N)
-print("B_exp", B_exp)
 
 # import data
 with open(f'{folder_name}/pareto_data.pkl', 'rb') as f:
@@ -61,6 +58,9 @@ num_exp = 200
 
 # ------------BaySS------------#
 print("BaySS")
+print("c", c)
+print("N", N)
+print("B_exp", B_exp)
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
