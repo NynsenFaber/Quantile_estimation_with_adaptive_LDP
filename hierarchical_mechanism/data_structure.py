@@ -8,7 +8,7 @@ def fill_tree(node, branching):
     :param node: a node
     :param branching: the branching factor
     """
-    data = node.data
+    data = node.mechanisms
     split = max(len(data) // branching, 1)
     for _ in range(branching):
         child_indices = range(split)
@@ -233,15 +233,15 @@ class Tree(Node):
         child_nodes = node.children
         for child_node in child_nodes:
             if verbose: print(
-                f"\nvisiting node with data {child_node.data} and attribute {child_node.attribute} and S={S}")
-            if leaf_data == list(child_node.data) or leaf_data[0] == list(child_node.data)[-1]:
+                f"\nvisiting node with data {child_node.mechanisms} and attribute {child_node.attribute} and S={S}")
+            if leaf_data == list(child_node.mechanisms) or leaf_data[0] == list(child_node.mechanisms)[-1]:
                 S += child_node.attribute
-                if verbose: print(f"found final node {child_node.data} final S={S}")
+                if verbose: print(f"found final node {child_node.mechanisms} final S={S}")
                 return S
-            if leaf_data[0] not in list(child_node.data):
+            if leaf_data[0] not in list(child_node.mechanisms):
                 S += child_node.attribute
                 if verbose: print(f"Node not found S={S}")
-            if leaf_data[0] in list(child_node.data):
+            if leaf_data[0] in list(child_node.mechanisms):
                 if verbose: print("\n ------->Going to child node \n")
                 S += self._get_range_r(child_node, leaf_data, S=0, verbose=verbose)
                 return S

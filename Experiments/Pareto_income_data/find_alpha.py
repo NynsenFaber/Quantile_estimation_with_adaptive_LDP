@@ -16,7 +16,7 @@ grandparent_dir = os.path.dirname(parent_dir)
 sys.path.append(grandparent_dir)
 
 # Import the required module from gretta_price_dp
-from BaySS.mechanism import gretta_price_dp
+from BaySS.mechanism import bayss_dp
 
 
 def upload_data(N: int, B_exp: int):
@@ -82,14 +82,14 @@ for i, c in tqdm.tqdm(enumerate(c_list)):
     print("Searching for alpha: ", alpha)
     alphas[i] = alpha
     for j in range(num_exp):
-        coin = gretta_price_dp(data=data_dict["data"],
-                               intervals=data_dict["intervals"],
-                               M=len(data_dict["data"]),
-                               alpha=alpha,
-                               eps=eps,
-                               target=target,
-                               replacement=replacement,
-                               naive_NBS=True)
+        coin = bayss_dp(data=data_dict["data"],
+                        intervals=data_dict["intervals"],
+                        M=len(data_dict["data"]),
+                        alpha=alpha,
+                        eps=eps,
+                        target=target,
+                        replacement=replacement,
+                        naive_NBS=True)
         succ, err = check_coin(coin=coin, cf_dict=data_dict["cf_dict"], target=target, alpha=alpha_test,
                                median=data_dict["median"])
         coins[i, j] = coin
