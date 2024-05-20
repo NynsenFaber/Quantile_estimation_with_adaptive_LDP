@@ -61,7 +61,7 @@ def get_th_alpha(B: int, N: int, c: float = 1) -> float:
 
 # ------------Parameters of the data------------#
 eps = 1.5
-N = 5000
+N = 2500
 B_exp = 9
 num_exp = 200
 alpha_test = 0.01

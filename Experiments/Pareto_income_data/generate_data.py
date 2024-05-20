@@ -20,8 +20,8 @@ def generate_pareto_data(shape, N, B_exp):
 
 
 seed = 42
-N = 2000  # number of samples
-B_exp = 7
+N = 2500  # number of samples
+B_exp = 9
 
 np.random.seed(seed)
 
