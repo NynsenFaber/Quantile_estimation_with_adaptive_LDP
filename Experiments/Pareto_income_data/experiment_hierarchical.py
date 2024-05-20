@@ -20,8 +20,8 @@ from hierarchical_mechanism.mechanism import hierarchical_mechanism_quantile
 from hierarchical_mechanism.data_structure import Tree
 
 # ------------Parameters of the data------------#
-B_exp = 9
-N = 5000
+B_exp = 10
+N = 2000
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
 # import data

@@ -16,7 +16,7 @@ grandparent_dir = os.path.dirname(parent_dir)
 sys.path.append(grandparent_dir)
 
 # Import the required module from gretta_price_dp
-from gretta_price_dp.mechanism import gretta_price_dp
+from BaySS.mechanism import gretta_price_dp
 
 
 def upload_data(N: int, B_exp: int):

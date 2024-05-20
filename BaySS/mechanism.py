@@ -4,14 +4,14 @@ from collections import defaultdict
 from .utils import check_coins, vector_RR, naive_noisy_binary_search
 
 
-def gretta_price_dp(data: list,
-                    alpha: float,
-                    eps: float,
-                    M: int,
-                    intervals: np.array,
-                    target: float = 0.5,
-                    replacement: bool = False,
-                    naive_NBS: bool = True) -> int:
+def bayss_dp(data: list,
+             alpha: float,
+             eps: float,
+             M: int,
+             intervals: np.array,
+             target: float = 0.5,
+             replacement: bool = False,
+             naive_NBS: bool = True) -> int:
     """
     Algorithm developed by Gretta-Price. It uses Bayesian learning to reduce the number of intervals. This version works
     with differential privacy and sampling without replacement.

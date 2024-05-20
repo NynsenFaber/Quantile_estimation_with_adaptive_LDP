@@ -16,15 +16,17 @@ grandparent_dir = os.path.dirname(parent_dir)
 sys.path.append(grandparent_dir)
 
 # Import the required module from gretta_price_dp
-from gretta_price_dp.mechanism import gretta_price_dp
-from gretta_price_dp.utils import get_th_alpha
+from BaySS.mechanism import bayss_dp
+from BaySS.utils import get_th_alpha
 
 # ------------Parameters of the data------------#
-B_exp = 9
-N = 5000
-c = 1.5
+B_exp = 10
+N = 2000
+c = 2.0
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 print("c", c)
+print("N", N)
+print("B_exp", B_exp)
 
 # import data
 with open(f'{folder_name}/pareto_data.pkl', 'rb') as f:
@@ -57,21 +59,21 @@ alpha_test = 0.05
 replacement = False
 num_exp = 200
 
-# ------------Gretta Price------------#
-print("Gretta Price")
+# ------------BaySS------------#
+print("BaySS")
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
 alpha = get_th_alpha(B=B_exp, N=N, c=c)
 for i, eps in tqdm.tqdm(enumerate(eps_list)):
     for j in range(num_exp):
-        coin = gretta_price_dp(data=data,
-                               intervals=intervals,
-                               M=len(data),
-                               alpha=alpha,
-                               eps=eps,
-                               target=target,
-                               replacement=replacement)
+        coin = bayss_dp(data=data,
+                        intervals=intervals,
+                        M=len(data),
+                        alpha=alpha,
+                        eps=eps,
+                        target=target,
+                        replacement=replacement)
         succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha_test, median=median)
         coins[i, j] = coin
         errors[i, j] = err
