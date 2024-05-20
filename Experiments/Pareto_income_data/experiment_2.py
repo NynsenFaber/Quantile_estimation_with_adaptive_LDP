@@ -52,7 +52,7 @@ def get_th_alpha(B: int, N: int, c: float = 1) -> float:
 
 # ------------Parameters of the data------------#
 eps = 1
-N = 20
+N = 2500
 c = 0.6  # multiplicative factor for theoretical alpha = O(sqrt(log(B))/sqrt(N))
 
 print("Second Experiment between Noisy Binary Search and DpBayeSS")
