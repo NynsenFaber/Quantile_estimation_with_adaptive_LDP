@@ -19,8 +19,8 @@ sys.path.append(grandparent_dir)
 from naive_noisy_binary_search.mechanism import naive_noisy_binary_search
 
 # ------------Parameters of the data------------#
-B_exp = 10
-N = 2000
+B_exp = 8
+N = 10000
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
 # import data

@@ -64,7 +64,7 @@ print("BaySS")
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
 errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
 success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
-alpha = get_th_alpha(B=B_exp, N=N, c=c)
+alpha = get_th_alpha(B=4**B_exp, N=N, c=c)
 for i, eps in tqdm.tqdm(enumerate(eps_list)):
     for j in range(num_exp):
         coin = bayss_dp(data=data,
