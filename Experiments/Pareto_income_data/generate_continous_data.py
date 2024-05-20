@@ -10,7 +10,7 @@ def generate_pareto_data(shape, N):
 
 
 seed = 42
-N = 20  # number of samples
+N = 5000  # number of samples
 
 np.random.seed(seed)
 

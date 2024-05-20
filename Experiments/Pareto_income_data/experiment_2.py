@@ -69,6 +69,7 @@ replacement = False
 num_exp = 200
 
 print(f"Number of experiments: {num_exp}")
+print(f"Number of bins: {num_bins_list}")
 
 data_dict = upload_data(N=N)
 
@@ -97,7 +98,7 @@ for i, num_bins in tqdm.tqdm(enumerate(num_bins_list)):
         success[i, j] = succ
 
 # save results
-folder_name = f"results/continuum/noisy_binary_search/N_{N}/eps_{eps}"
+folder_name = f"results/continuum/noisy_binary_search/N_{N}/eps_{eps}/bins_{int(num_bins_list[0])}_{int(num_bins_list[-1])}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
@@ -106,6 +107,8 @@ with open(f"{folder_name}/errors.pkl", "wb") as f:
     pickle.dump(errors, f)
 with open(f"{folder_name}/success.pkl", "wb") as f:
     pickle.dump(success, f)
+with open(f"{folder_name}/num_bins_list.pkl", "wb") as f:
+    pickle.dump(num_bins_list, f)
 
 # ------------DpBayeSS------------#
 print("DpBayeSS")
@@ -135,7 +138,7 @@ for i, num_bins in tqdm.tqdm(enumerate(num_bins_list)):
         success[i, j] = succ
 
 # save results
-folder_name = f"results/continuum/BayeSS/N_{N}/eps_{eps}"
+folder_name = f"results/continuum/BayeSS/N_{N}/eps_{eps}/bins_{int(num_bins_list[0])}_{int(num_bins_list[-1])}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
@@ -144,4 +147,5 @@ with open(f"{folder_name}/errors.pkl", "wb") as f:
     pickle.dump(errors, f)
 with open(f"{folder_name}/success.pkl", "wb") as f:
     pickle.dump(success, f)
-
+with open(f"{folder_name}/num_bins_list.pkl", "wb") as f:
+    pickle.dump(num_bins_list, f)
