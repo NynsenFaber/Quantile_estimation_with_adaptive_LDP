@@ -4,11 +4,11 @@ This repository contain the code for the paper "Quantile Estimation with Adaptiv
 
 To run the code, you need to install a conda environment using the environment.yml file
     
-    ``` conda env create -f environment.yml ```
+    conda env create -f environment.yml
 
 Then, activate the environment
 
-    ``` conda activate LDP_q_est```
+    conda activate LDP_q_est
 
 ## Mechanisms
 *BaySS* contains the code for the differential private implementation of the Bayesian Screening Search in 
