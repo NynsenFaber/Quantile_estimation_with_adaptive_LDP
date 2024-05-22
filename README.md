@@ -24,3 +24,5 @@ The LDP protocol used is the unary encoding, we used the library from https://gi
 In *Pareto_income_data* we provide the analysis for the hyper-parameter of the BaySS mechanism in **find_alpha.py**, and 
 also the comparison experiments on the other files. In *Skewed data* there are the experiments on a synthetic integer uniform distribution
 with random left and right bounds.
+In each folder there is a **generate_data.py** used to generate and store the data.
+
