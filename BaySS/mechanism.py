@@ -62,6 +62,7 @@ def bayss_dp(data: list,
                                  eps=eps)
 
     if len(R) > 13:
+        # Apply again the Bayesian learning
         flag = True
 
         coins = R.flatten()  # new coins
@@ -160,7 +161,7 @@ def toss_coins(M: int,
                eps: float,
                replacement: bool) -> dict[int, float]:
     """
-    Toss coins and update the histogram
+    Toss coins algorithm. It samples the coins and returns the empirical cdf of the coins.
     :param M: number of tosses
     :param intervals: list of the intervals
     :param D: dataset to sample

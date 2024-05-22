@@ -135,7 +135,7 @@ class Tree(Node):
         """
         return self._get_range_r(self, leaf_data, S, verbose)
 
-    def binary_search_for_quantile(self, quantile, alpha=0.05):
+    def binary_search_for_quantile(self, quantile):
         """
         It works only if the cdf estimated is monotonically increasing, which for low epsilon is not the case.
         Is fast but not accurate.

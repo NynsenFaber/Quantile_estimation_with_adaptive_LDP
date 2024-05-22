@@ -131,7 +131,7 @@ def flip_coin(coin: int, sample: int) -> int:
 @njit
 def RR(A: int, B: int) -> int:
     """
-    Given the result of coin A and the reuslt of DP coin due to randomized response B, we return the private coin
+    Given the result of coin A and the result of DP coin due to randomized response B, we return the private coin
     Truth Table:
     A  B  result
     0  0  1

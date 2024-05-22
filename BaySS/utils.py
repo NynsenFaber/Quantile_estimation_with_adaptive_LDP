@@ -131,8 +131,8 @@ def naive_noisy_binary_search(data: np.array,
     coins_prob = {}
 
     # start with the middle coin (it has to be an array)
-    coin = [coins[(L+R) // 2]]
-    index_coin = (L+R) // 2
+    coin = [coins[(L + R) // 2]]
+    index_coin = (L + R) // 2
 
     count = 0
     if flag_redistribute:
@@ -167,8 +167,6 @@ def naive_noisy_binary_search(data: np.array,
             L = index_coin + 1
 
         index_coin = (L + R) // 2
-        # # get the closest element in coins
-        # coin = [min(coins, key=lambda x: abs(x - new_coin))]
         coin = [coins[index_coin]]
 
         count += 1

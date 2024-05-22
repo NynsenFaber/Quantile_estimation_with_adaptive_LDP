@@ -71,7 +71,6 @@ data_dict = upload_data(N, B_exp)
 c_list = np.linspace(0.1, 2, 10)
 target = 0.5
 replacement = False
-tries = 1
 
 print("--- Find alpha update ---")
 print("N", N)
@@ -105,7 +104,7 @@ for i, c in tqdm.tqdm(enumerate(c_list)):
         success[i, j] = succ
 
 # save results
-folder_name = f"results/BaySS/find_alpha_{tries}/N_{N}/B_exp_{B_exp}/eps_{eps}"
+folder_name = f"results/BaySS_find_alpha/N_{N}/B_exp_{B_exp}/eps_{eps}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
