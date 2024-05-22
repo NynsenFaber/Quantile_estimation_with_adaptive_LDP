@@ -19,9 +19,15 @@ def generate_pareto_data(shape, N, B_exp):
     return D
 
 
+"""
+    Select here the parameters for generating the data, we used:
+    - B_exp = 9,8
+    - N = 2500, 5000, 7500
+"""
+
 seed = 42
 N = 2500  # number of samples
-B_exp = 9
+B_exp = 8  # exponent of the number of bins
 
 np.random.seed(seed)
 

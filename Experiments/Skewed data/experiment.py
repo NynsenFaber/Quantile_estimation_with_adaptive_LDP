@@ -51,8 +51,15 @@ def get_th_alpha(B: int, N: int, c: float = 1) -> float:
 
 
 # ------------Parameters of the data------------#
-eps = 0.5
-N = 2500
+
+"""
+    Select here the parameters of the experiment, for our experiments we used:
+    -eps = 0.5, 1
+    -N = 2500
+    -c = 0.6
+"""
+eps = 1.  # privacy parameter
+N = 2500  # number of data points
 c = 0.6  # multiplicative factor for theoretical alpha = O(sqrt(log(B))/sqrt(N))
 
 print("Second Experiment between Noisy Binary Search and DpBayeSS")
@@ -63,10 +70,10 @@ print(f"Multiplicative factor for theoretical alpha: {c}")
 alpha_test = 0.05
 
 # ------------Parameters of the mechanism------------#
-num_bins_list = [int(1E2), int(1E3), int(1E4), int(1E5), int(1E6)]
+num_bins_list = [int(1E2), int(1E3), int(1E4), int(1E5), int(1E6)]  # list of number of bins
 target = 0.5
-replacement = False
-num_exp = 200
+replacement = False  # sample without replacement
+num_exp = 200  # number of experiments
 
 print(f"Number of experiments: {num_exp}")
 print(f"Number of bins: {num_bins_list}")

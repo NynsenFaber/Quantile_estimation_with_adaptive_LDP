@@ -20,8 +20,15 @@ from hierarchical_mechanism.mechanism import hierarchical_mechanism_quantile
 from hierarchical_mechanism.data_structure import Tree
 
 # ------------Parameters of the data------------#
-B_exp = 9
-N = 2500
+
+"""
+    Select here the parameters of the experiment, for our experiments we used:
+    - B_exp = 8, 9
+    - N = 2500, 5000, 7500
+"""
+
+B_exp = 8  # exponent of the number of bins 4^B_exp
+N = 2500  # number of data points
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
 # import data
@@ -49,11 +56,11 @@ with open(f'{folder_name}/pareto_cdf.pkl', 'rb') as f:
     cf_dict = pickle.load(f)
 
 # ------------Parameters of the mechanism------------#
-eps_list = np.geomspace(0.1, 5, 10)
+eps_list = np.geomspace(0.1, 5, 10)  # list of privacy budgets
 target = 0.5
-alpha_test = 0.05
-replacement = False
-num_exp = 200
+alpha_test = 0.05  # alpha test (not really used)
+replacement = False  # sample withour replacement
+num_exp = 200  # number of experiments
 
 # ------------Hierarchical Mechanism------------#
 print("Hierarchical Mechanism")

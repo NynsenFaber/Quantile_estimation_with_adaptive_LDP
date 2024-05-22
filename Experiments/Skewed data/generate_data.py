@@ -14,9 +14,15 @@ def generate_random_center_uniform(N, B):
     return np.random.choice(range(left, right + 1), N).astype(int)
 
 
+"""
+    Select here the parameters for generating the data, we used:
+    - N = 2500
+    - B = 10^3, 10^4, 10^5, 10^6, 10^7
+"""
+
 seed = 42
 N = 2500  # number of samples
-B = int(1E7)
+B = int(1E7)  # number of bins
 
 np.random.seed(seed)
 

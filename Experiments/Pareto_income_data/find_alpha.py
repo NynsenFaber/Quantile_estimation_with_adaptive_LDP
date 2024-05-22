@@ -60,11 +60,19 @@ def get_th_alpha(B: int, N: int, c: float = 1) -> float:
 
 
 # ------------Parameters of the data------------#
-eps = 1.5
-N = 2500
-B_exp = 9
-num_exp = 200
-alpha_test = 0.01
+
+"""
+    Select here the parameters of the experiment, for our experiments we used:
+    - B_exp = 8, 9
+    - N = 2500, 5000
+    - eps = 0.5, 1, 1.5
+"""
+
+eps = 1.5  # privacy budget
+N = 2500  # number of data points
+B_exp = 8  # exponent of the number of bins
+num_exp = 200  # number of experiments
+alpha_test = 0.01  # alpha for the test (not really used)
 
 # ------------Parameters of the mechanism------------#
 data_dict = upload_data(N, B_exp)
