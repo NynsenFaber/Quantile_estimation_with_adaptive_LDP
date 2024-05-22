@@ -10,7 +10,6 @@ def generate_random_center_uniform(N, B):
     left = np.random.choice(range(0, int(B / 2)), 1)[0].astype(int)
     # sample a random right endpoint
     right = np.random.choice(range(int(B / 2), B), 1)[0].astype(int)
-    print(left, right)
     return np.random.choice(range(left, right + 1), N).astype(int)
 
 
