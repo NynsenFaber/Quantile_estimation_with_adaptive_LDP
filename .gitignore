@@ -1,6 +1,2 @@
 .gitignore
 .idea/*
-/experiments/skewed_data/data/
-/experiments/skewed_data/figures/
-/experiments/pareto_income_data/data/
-/experiments/pareto_income_data/figures/
