@@ -31,12 +31,6 @@ def generate_pareto_data(shape, N, B_exp):
     return D
 
 
-"""
-    Select here the parameters for generating the data, we used:
-    - B_exp = 9,8
-    - N = 2500, 5000, 7500
-"""
-
 args = parse_arguments()
 seed = args.seed
 N = args.N  # number of samples
@@ -65,7 +59,7 @@ cf_dict = dict(sorted(cf_dict.items()))
 median = None
 for i, j in enumerate(cf_dict.keys()):
     if cf_dict[j] >= 0.5:
-        median = int(list(cf_dict.keys())[i])
+        median = int(list(cf_dict.keys())[i - 1])  # the median is the left coin of the best interval
         break
 median_quantile = cf_dict[median]
 
