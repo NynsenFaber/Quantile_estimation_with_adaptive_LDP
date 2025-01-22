@@ -1,4 +1,6 @@
-/TEST.ipynb/
 .gitignore
 .idea/*
-/Experiment_test/
+/experiments/skewed_data/data/
+/experiments/skewed_data/figures/
+/experiments/pareto_income_data/data/
+/experiments/pareto_income_data/figures/

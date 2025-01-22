@@ -3,6 +3,18 @@ from scipy.stats import ecdf
 import matplotlib.pyplot as plt
 import pickle
 import os
+import argparse
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--seed', type=int, default=42,
+                        help='the seed used to generate random numbers (default: 42)')
+    parser.add_argument('--N', type=int,
+                        help='Number of samples', required=True)
+    parser.add_argument('--B_exp', type=int,
+                        help='Exponent of the number of bins', required=True)
+    return parser.parse_args()
 
 
 def generate_pareto_data(shape, N, B_exp):
@@ -25,9 +37,10 @@ def generate_pareto_data(shape, N, B_exp):
     - N = 2500, 5000, 7500
 """
 
-seed = 42
-N = 2500  # number of samples
-B_exp = 8  # exponent of the number of bins
+args = parse_arguments()
+seed = args.seed
+N = args.N  # number of samples
+B_exp = args.B_exp  # exponent of the number of bins
 
 np.random.seed(seed)
 
@@ -51,8 +64,8 @@ cf_dict = dict(sorted(cf_dict.items()))
 # get the median quantile
 median = None
 for i, j in enumerate(cf_dict.keys()):
-    if cf_dict[j] > 0.5:
-        median = int(list(cf_dict.keys())[i - 1])
+    if cf_dict[j] >= 0.5:
+        median = int(list(cf_dict.keys())[i])
         break
 median_quantile = cf_dict[median]
 

@@ -3,7 +3,17 @@ from scipy.stats import ecdf
 import matplotlib.pyplot as plt
 import pickle
 import os
+import argparse
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--seed', type=int, default=42,
+                        help='the seed used to generate random numbers (default: 42)')
+    parser.add_argument('--N', type=int,
+                        help='Number of samples', required=True)
+    parser.add_argument('--B', type=int,
+                        help='Exponent of the number of bins', required=True)
+    return parser.parse_args()
 
 def generate_random_center_uniform(N, B):
     # sample a random left endpoint
@@ -19,9 +29,10 @@ def generate_random_center_uniform(N, B):
     - B = 10^3, 10^4, 10^5, 10^6, 10^7
 """
 
-seed = 42
-N = 2500  # number of samples
-B = int(1E7)  # number of bins
+args = parse_arguments()
+seed = args.seed
+N = args.N  # number of samples
+B = int(args.B)  # number of bins
 
 np.random.seed(seed)
 
