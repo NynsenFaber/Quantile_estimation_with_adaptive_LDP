@@ -98,8 +98,8 @@ class Tree(Node):
         :param counts: a list of counts (server returns absolute frequency)
         """
         depth = self.depth
-        self._cum_chunks = []
-        self._attribute_levels = []
+        self._cum_chunks = []  # reset
+        self._attribute_levels = []  # reset
         for level in range(0, depth):
             nodes = self.get_nodes_at_level(level)
             cum_chunks = []
@@ -131,7 +131,7 @@ class Tree(Node):
 
     def get_range_r(self, leaf_data, S=0, verbose=False) -> float:
         """
-        Get a right range query (eg, leaf_data = [4] returns the cdf of the bin 4). Is slow to compute the cdf.
+        Get a right range query (eg, leaf_data = [4] returns the cdf of the bin 4). It is slow to compute the cdf.
         """
         return self._get_range_r(self, leaf_data, S, verbose)
 
