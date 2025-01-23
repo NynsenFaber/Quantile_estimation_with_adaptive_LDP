@@ -79,7 +79,7 @@ for i, eps in tqdm.tqdm(enumerate(eps_list)):
         coin = bayss_dp(data=data,
                         intervals=intervals,
                         M=len(data),
-                        alpha=alpha,
+                        alpha_update=alpha,
                         eps=eps,
                         target=target,
                         replacement=replacement)

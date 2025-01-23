@@ -6,19 +6,23 @@ from numba import njit
 
 
 def bayes_learn(data: list,
-                alpha: float,
+                alpha_update: float,
                 eps: float,
                 M: int,
                 intervals: np.array,
                 target: float = 0.5,
                 replacement: bool = False) -> tuple[np.array, list]:
     """
-    BayesLearn for the median given a dataset D (np.array) of values in [B], an error alpha in (0, 0.5),
+    A differential private implementation of BayesLearn for the median
+    given a dataset D (np.array) of values in [B], an error alpha in (0, 0.25),
     and a number of steps (samples from D) M smaller than the length of the data,
-    returns a list of visited intervals and the empirical probability of the coin.
-    probabilities
+    returns a list of visited intervals.
+
+    Ref:  Gretta, Lucas, and Eric Price. "Sharp Noisy Binary Search with Monotonic Probabilities."
+          arXiv preprint arXiv:2311.00840 (2023).
+
     :param data: dataset of values in [B]
-    :param alpha: target error
+    :param alpha_update: error used to update the weights
     :param eps: privacy parameter
     :param M: steps (samples)
     :param intervals: list of intervals [[x_1, x_2], [x_2, x_3], ...]
@@ -28,12 +32,14 @@ def bayes_learn(data: list,
     :return: L, list (np.array) of visited intervals indices
     :return: D, the dataset after the sampling
     """
-    assert 0 < alpha < target, "alpha must be in (0, 0.5) for the median"
-    assert 0 <= M <= len(data), "M must be smaller than the length of the data"
+    assert 0 < alpha_update < 0.25, "alpha must be in (0, 0.25) for the median"
+    assert 0 <= M < len(data), "M must be smaller than the length of the data"
 
     # generate bernoulli coins with probability np.exp(eps) / (1 + np.exp(eps))
     eps = np.clip(eps, 0.00001, 100)  # for stability
     random_coin = np.random.binomial(1, np.exp(eps) / (1 + np.exp(eps)), M)
+
+    # compute
 
     # define uniform prior over the intervals
     w: np.array = np.ones(len(intervals)) / (len(intervals))
@@ -64,7 +70,7 @@ def bayes_learn(data: list,
         y_i = RR(y_i, random_coin[i])
 
         # update the weights (this can be optimized by using a segment tree as proposed in the reference paper)
-        w = update(w, alpha, y_i, interval_index)
+        w = update(w, alpha_update, y_i, interval_index)
 
     return L, data
 

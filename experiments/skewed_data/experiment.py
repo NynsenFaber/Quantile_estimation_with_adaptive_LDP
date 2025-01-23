@@ -136,7 +136,7 @@ for i, num_bins in tqdm.tqdm(enumerate(num_bins_list)):
         coin = bayss_dp(data=data_dict["data"],
                         intervals=intervals,
                         M=len(data_dict["data"]),
-                        alpha=alpha,
+                        alpha_update=alpha,
                         eps=eps,
                         target=target,
                         replacement=replacement)

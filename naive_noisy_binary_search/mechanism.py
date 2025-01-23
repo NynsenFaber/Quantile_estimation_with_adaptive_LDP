@@ -1,5 +1,4 @@
 import numpy as np
-from collections import defaultdict
 from .utils import vector_RR
 
 
