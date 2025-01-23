@@ -31,7 +31,7 @@ def get_quantile_absolute_error(x: float, y: float, cdf: dict[int, float]) -> fl
     return abs(get_quantile(x, cdf) - get_quantile(y, cdf))
 
 
-def success(value: float, alpha: float, cdf: dict[int, float], tau: float = 0.5) -> bool:
+def get_success(value: float, alpha: float, cdf: dict[int, float], tau: float = 0.5) -> bool:
     """
     Check if a quantile is alpha-good
 
