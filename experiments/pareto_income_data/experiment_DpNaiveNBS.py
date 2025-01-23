@@ -2,6 +2,7 @@ import sys
 import os
 import pickle
 import tqdm
+import argparse
 
 import numpy as np
 from utils import check_coin
@@ -26,8 +27,19 @@ from naive_noisy_binary_search.mechanism import naive_noisy_binary_search
     - N = 2500, 5000, 7500
 """
 
-B_exp = 8  # exponent of the number of bins 4^B_exp
-N = 2500  # number of data points
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--N', type=int,
+                        help='Number of samples', required=True)
+    parser.add_argument('--B_exp', type=int,
+                        help='Exponent of the number of bins', required=True)
+    return parser.parse_args()
+
+
+args = parse_arguments()
+B_exp = args.B_exp  # exponent of the number of bins 4^B_exp
+N = args.N  # number of data points
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
 # import data
@@ -57,9 +69,9 @@ with open(f'{folder_name}/pareto_cdf.pkl', 'rb') as f:
 # ------------Parameters of the mechanism------------#
 eps_list = np.geomspace(0.1, 5, 10)  # list of privacy budgets
 target = 0.5
-alpha_test = 0.05  # alpha test (not really used)
 replacement = False  # sample without replacement
 num_exp = 200  # number of experiments
+coins = bins
 
 # ------------Noisy Binary Search------------#
 print("Noisy Binary Search")
@@ -67,21 +79,15 @@ print(f"Number of experiments: {num_exp}")
 print(f"Number of data points: {N}")
 print(f"B_exp: {B_exp}")
 
-coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
-errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
-success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
-for i, eps in tqdm.tqdm(enumerate(eps_list)):
+returned_coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
+for i, eps in tqdm.tqdm(enumerate(eps_list), total=len(eps_list), colour="green"):
     for j in range(num_exp):
         coin = naive_noisy_binary_search(data=data,
-                                         intervals=intervals,
-                                         M=len(data),
+                                         coins=coins,
                                          eps=eps,
                                          target=target,
                                          replacement=replacement)
-        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha_test, median=median)
-        coins[i, j] = coin
-        errors[i, j] = err
-        success[i, j] = succ
+        returned_coins[i, j] = coin
 
 # save results
 folder_name = f"results/naive_noisy_binary_search/N_{N}/B_exp_{B_exp}"
@@ -89,7 +95,3 @@ os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
     pickle.dump(coins, f)
-with open(f"{folder_name}/errors.pkl", "wb") as f:
-    pickle.dump(errors, f)
-with open(f"{folder_name}/success.pkl", "wb") as f:
-    pickle.dump(success, f)
