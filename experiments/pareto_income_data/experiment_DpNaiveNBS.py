@@ -46,25 +46,9 @@ folder_name = f"data/N_{N}/B_exp_{B_exp}"
 with open(f'{folder_name}/pareto_data.pkl', 'rb') as f:
     data = pickle.load(f)
 
-# import bins
+# import bins (coins)
 with open(f'{folder_name}/pareto_bins.pkl', 'rb') as f:
     bins = pickle.load(f)
-
-# import intervals
-with open(f'{folder_name}/pareto_intervals.pkl', 'rb') as f:
-    intervals = pickle.load(f)
-
-# import median
-with open(f'{folder_name}/pareto_median.pkl', 'rb') as f:
-    median = pickle.load(f)
-
-# import median quantile
-with open(f'{folder_name}/pareto_median_quantile.pkl', 'rb') as f:
-    median_quantile = pickle.load(f)
-
-# import cdf
-with open(f'{folder_name}/pareto_cdf.pkl', 'rb') as f:
-    cf_dict = pickle.load(f)
 
 # ------------Parameters of the mechanism------------#
 eps_list = np.geomspace(0.1, 5, 10)  # list of privacy budgets
@@ -94,4 +78,4 @@ folder_name = f"results/naive_noisy_binary_search/N_{N}/B_exp_{B_exp}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
-    pickle.dump(coins, f)
+    pickle.dump(returned_coins, f)
