@@ -67,8 +67,6 @@ print("Second Experiment between Noisy Binary Search and DpBayeSS")
 print(f"Number of data points: {N}")
 print(f"Privacy parameter: {eps}")
 
-alpha_test = 0.05
-
 # ------------Parameters of the mechanism------------#
 num_bins_list = [int(1E2), int(1E3), int(1E4), int(1E5), int(1E6)]  # list of number of bins
 target = 0.5
@@ -82,7 +80,7 @@ print(f"Number of bins: {num_bins_list}")
 print("Noisy Binary Search")
 # store the output of the mechanism (B size of the domain, experiment)
 returned_coins = np.zeros((len(num_bins_list), num_exp))
-for i, num_bins in tqdm.tqdm(enumerate(num_bins_list)):
+for i, num_bins in tqdm.tqdm(enumerate(num_bins_list), total=len(num_bins_list), colour="green"):
     # upload data
     data_dict = upload_data(N=N, B=num_bins)
     # get coins
@@ -97,7 +95,7 @@ for i, num_bins in tqdm.tqdm(enumerate(num_bins_list)):
         returned_coins[i, j] = coin
 
 # save results
-folder_name = f"results/noisy_binary_search/N_{N}/eps_{eps}/bins_{int(num_bins_list[0])}_{int(num_bins_list[-1])}"
+folder_name = f"results/naive_noisy_binary_search/N_{N}/eps_{eps}/bins_{int(num_bins_list[0])}_{int(num_bins_list[-1])}"
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
