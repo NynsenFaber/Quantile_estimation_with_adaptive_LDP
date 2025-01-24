@@ -47,7 +47,7 @@ def parse_arguments():
 args = parse_arguments()
 B_exp = args.B_exp  # exponent of the number of bins 4^B_exp
 N = args.N  # number of data points
-c = args.c # multiplicative factor for theoretical alpha = O(sqrt(log(B))/sqrt(N))
+c = args.c  # multiplicative factor for theoretical alpha = O(sqrt(log(B))/sqrt(N))
 
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
