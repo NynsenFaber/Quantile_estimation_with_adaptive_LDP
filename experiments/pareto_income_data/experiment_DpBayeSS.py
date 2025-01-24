@@ -2,6 +2,7 @@ import sys
 import os
 import pickle
 import tqdm
+import argparse
 
 import numpy as np
 from utils import check_coin
@@ -14,10 +15,13 @@ parent_dir = os.path.dirname(current_dir)
 grandparent_dir = os.path.dirname(parent_dir)
 # Add both parent and grandparent directories to the Python path
 sys.path.append(grandparent_dir)
-
 # Import the required module from gretta_price_dp
 from BaySS.mechanism import bayss_dp
-from BaySS.utils import get_th_alpha
+
+
+def get_th_alpha(B: int, N: int, c: float = 1) -> float:
+    return c * np.sqrt(np.log(B)) / (np.sqrt(N))
+
 
 # ------------Parameters of the data------------#
 
@@ -28,9 +32,22 @@ from BaySS.utils import get_th_alpha
     - c = 0.6
 """
 
-B_exp = 8  # exponent of the number of bins 4^B_exp
-N = 2500  # number of data points
-c = 0.6  # multiplicative factor for theoretical alpha = O(sqrt(log(B))/sqrt(N))
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--N', type=int,
+                        help='Number of samples', required=True)
+    parser.add_argument('--B_exp', type=int,
+                        help='Exponent of the number of bins', required=True)
+    parser.add_argument('--c', type=float,
+                        help='c parameter', required=True)
+    return parser.parse_args()
+
+
+args = parse_arguments()
+B_exp = args.B_exp  # exponent of the number of bins 4^B_exp
+N = args.N  # number of data points
+c = args.c # multiplicative factor for theoretical alpha = O(sqrt(log(B))/sqrt(N))
 
 folder_name = f"data/N_{N}/B_exp_{B_exp}"
 
@@ -46,22 +63,9 @@ with open(f'{folder_name}/pareto_bins.pkl', 'rb') as f:
 with open(f'{folder_name}/pareto_intervals.pkl', 'rb') as f:
     intervals = pickle.load(f)
 
-# import median
-with open(f'{folder_name}/pareto_median.pkl', 'rb') as f:
-    median = pickle.load(f)
-
-# import median quantile
-with open(f'{folder_name}/pareto_median_quantile.pkl', 'rb') as f:
-    median_quantile = pickle.load(f)
-
-# import cdf
-with open(f'{folder_name}/pareto_cdf.pkl', 'rb') as f:
-    cf_dict = pickle.load(f)
-
 # ------------Parameters of the mechanism------------#
 eps_list = np.geomspace(0.1, 5, 10)  # list of privacy budgets
 target = 0.5
-alpha_test = 0.05  # alpha test (not really used)
 replacement = False  # sample without replacement
 num_exp = 200  # number of experiments
 
@@ -71,30 +75,20 @@ print("c", c)
 print("N", N)
 print("B_exp", B_exp)
 coins = np.zeros((len(eps_list), num_exp))  # store the output of the mechanism (epsilon, experiment)
-errors = np.zeros((len(eps_list), num_exp))  # store the error of the mechanism (epsilon, experiment)
-success = np.zeros((len(eps_list), num_exp))  # store the success of the mechanism (epsilon, experiment)
-alpha = get_th_alpha(B=4**B_exp, N=N, c=c)
+alpha = get_th_alpha(B=4 ** B_exp, N=N, c=c)
 for i, eps in tqdm.tqdm(enumerate(eps_list)):
     for j in range(num_exp):
         coin = bayss_dp(data=data,
                         intervals=intervals,
-                        M=len(data),
                         alpha_update=alpha,
                         eps=eps,
                         target=target,
                         replacement=replacement)
-        succ, err = check_coin(coin=coin, cf_dict=cf_dict, target=target, alpha=alpha_test, median=median)
         coins[i, j] = coin
-        errors[i, j] = err
-        success[i, j] = succ
 
 # save results
-folder_name = f"results/final_gretta_price_optimized/N_{N}/B_exp_{B_exp}/c_{c:.2f}".replace('.', '')
+folder_name = f"results/BayeSS_optimized/N_{N}/B_exp_{B_exp}/c_{c:.2f}".replace('.', '')
 os.makedirs(f"{folder_name}", exist_ok=True)
 
 with open(f"{folder_name}/coins.pkl", "wb") as f:
     pickle.dump(coins, f)
-with open(f"{folder_name}/errors.pkl", "wb") as f:
-    pickle.dump(errors, f)
-with open(f"{folder_name}/success.pkl", "wb") as f:
-    pickle.dump(success, f)
