@@ -18,11 +18,3 @@ def vector_RR(A: np.array, B: np.array) -> np.array:
     A = np.asarray(A, dtype=bool)
     B = np.asarray(B, dtype=bool)
     return ((A & B) | (~A & ~B)).astype(int)
-
-
-def get_intervals(bins: np.array) -> np.array:
-    """
-    Return intervals from bins
-    """
-    intervals = np.array([bins[:-1], bins[1:]]).T
-    return intervals
