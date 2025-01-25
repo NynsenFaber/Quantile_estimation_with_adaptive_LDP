@@ -26,21 +26,6 @@ def upload_data(N: int, B: int):
         data = pickle.load(f)
     output["data"] = data
 
-    # import median
-    with open(f'{folder}/median.pkl', 'rb') as f:
-        median = pickle.load(f)
-    output["median"] = median
-
-    # import median quantile
-    with open(f'{folder}/median_quantile.pkl', 'rb') as f:
-        median_quantile = pickle.load(f)
-    output["median_quantile"] = median_quantile
-
-    # import cdf
-    with open(f'{folder}/cdf.pkl', 'rb') as f:
-        cf_dict = pickle.load(f)
-    output["cf_dict"] = cf_dict
-
     return output
 
 
