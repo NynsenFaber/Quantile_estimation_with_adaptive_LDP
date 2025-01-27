@@ -18,3 +18,16 @@ def vector_RR(A: np.array, B: np.array) -> np.array:
     A = np.asarray(A, dtype=bool)
     B = np.asarray(B, dtype=bool)
     return ((A & B) | (~A & ~B)).astype(int)
+
+
+def get_eps_for_shuffle(N: float, B: float, eps: float, delta: float) -> float:
+    """
+    Get the privacy parameter for the shuffle mechanism.
+    :param N: number of users
+    :param B: number of coins
+    :param eps: privacy parameter
+    :param delta: delta parameter
+
+    :return: privacy budget epsilon for the shuffle mechanism
+    """
+    return np.log((eps ** 2 * N) / (80 * np.log(B) * np.log(4 / delta)))

@@ -1,5 +1,5 @@
 import numpy as np
-from .utils import vector_RR
+from .utils import vector_RR, get_eps_for_shuffle
 
 
 def unbiased_probability(eps: float) -> callable:
@@ -20,7 +20,9 @@ def naive_noisy_binary_search(data: np.array,
                               eps: float,
                               target: float,
                               replacement: bool = False,
-                              test: bool = False) -> int:
+                              test: bool = False,
+                              shuffle: bool = False,
+                              delta: float = None) -> int:
     """
     Naive Noisy Binary Search algorithm with randomized response. It runs noisy binary search using the entire dataset.
     It returns the coin with empirical head probability closest to the target value.
@@ -33,6 +35,8 @@ def naive_noisy_binary_search(data: np.array,
     :param target: target or quantile in (0,1) value
     :param replacement: with (True) / without (False) replacement
     :param test: if True, it runs the test
+    :param shuffle: if True, it applies shuffle differential privacy guarantees
+    :param delta: delta parameter for shuffle differential privacy
 
     Output:
     ----------
@@ -81,6 +85,11 @@ def naive_noisy_binary_search(data: np.array,
             sum_1 = np.sum(samples_list[0].size)
             sum_2 = np.sum(samples_list[1].size)
             assert sum_1 + sum_2 == M, "The number of flips is not equal to M, samples_list"
+
+    # check if shuffle differential privacy is required
+    if shuffle:
+        assert delta is not None, "Delta parameter must be provided for shuffle differential privacy"
+        eps = get_eps_for_shuffle(N=M, B=B, eps=eps, delta=delta)
 
     # prepare the random variable for the DP coin
     eps = np.clip(eps, 0.0001, 100)  # for stability

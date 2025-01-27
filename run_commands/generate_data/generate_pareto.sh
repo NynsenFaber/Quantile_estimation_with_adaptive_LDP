@@ -10,3 +10,5 @@ python generate_data.py --seed 42 --N 5000 --B_exp 8
 python generate_data.py --seed 42 --N 5000 --B_exp 9
 python generate_data.py --seed 42 --N 7500 --B_exp 8
 python generate_data.py --seed 42 --N 7500 --B_exp 9
+
+python generate_data.py --seed 42 --N 10000000 --B_exp 8

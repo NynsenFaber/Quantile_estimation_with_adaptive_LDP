@@ -5,7 +5,6 @@ import tqdm
 import argparse
 
 import numpy as np
-from utils import check_coin
 
 # Get the current directory of this script
 current_dir = os.path.dirname(os.path.abspath(__file__))
