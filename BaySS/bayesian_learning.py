@@ -1,5 +1,6 @@
 import numpy as np
 from numba import njit
+from tqdm import tqdm
 
 
 # Use numba to speed up the code
@@ -35,6 +36,16 @@ def bayes_learn(data: list,
     assert 0 < alpha_update < 0.25, "alpha must be in (0, 0.25) for the median"
     assert 0 <= M < len(data), "M must be smaller than the length of the data"
 
+    if not replacement:
+        # generate a random permutation of the data indices
+        data_to_use = np.random.permutation(data)
+        data_to_use = data_to_use[:M]  # data to use for bayes learning
+        data_not_used = data_to_use[M:]  # data not used
+    else:
+        indices = np.random.choice(len(data), M, replace=True)  # generate M random indices with replacement
+        data_to_use = data[indices]  # data to use for bayes learning
+        data_not_used = data  # data not used
+
     # generate bernoulli coins with probability np.exp(eps) / (1 + np.exp(eps))
     eps = np.clip(eps, 0.00001, 100)  # for stability
     random_coin = np.random.binomial(1, np.exp(eps) / (1 + np.exp(eps)), M)
@@ -51,17 +62,14 @@ def bayes_learn(data: list,
     else:
         raise NotImplementedError("BayesLearn is only implemented for the median")
 
-    for i in range(M):
+    for i, sample in enumerate(data_to_use):
         # get the median interval and closest coin of the weights
-        interval_index, coin_index = get_interval_coin_from_quantile(w, 0.5, i)
+        interval_index, coin_index = get_interval_coin_from_quantile(w, target, i)
         j_i = intervals[interval_index]
         x_i = j_i[coin_index]
 
         # add the interval index to the list
         L[i] = interval_index
-
-        # sample a random element from D
-        sample = sample_element(D=data, replacement=replacement)
 
         # flip the coin
         y_i = flip_coin(coin=x_i, sample=sample)
@@ -72,7 +80,7 @@ def bayes_learn(data: list,
         # update the weights (this can be optimized by using a segment tree as proposed in the reference paper)
         w = update(w, alpha_update, y_i, interval_index)
 
-    return L, data
+    return L, data_not_used
 
 
 @njit
@@ -114,20 +122,6 @@ def round_interval_to_coin(w: float, W: float, q: float) -> int:
     else:
         # return right coin of the interval
         return 1
-
-
-def sample_element(D: list, replacement: bool):
-    """
-    Sample a random element from the dataset D
-    :param D: dataset
-    :param replacement: with (True) / without (False) replacement
-    :return: an element from the dataset
-    """
-    sample_index = np.random.randint(len(D))
-    if replacement:
-        return D[sample_index]
-    else:
-        return D.pop(sample_index)
 
 
 def flip_coin(coin: int, sample: int) -> int:
@@ -175,3 +169,6 @@ def update_weights_median(w: np.array, alpha: float, y: int, j: int) -> np.array
     # add the renormalization step
     w[j] = 1 - S
     return w
+
+
+

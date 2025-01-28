@@ -34,6 +34,8 @@ def parse_arguments():
                         help='Number of samples', required=True)
     parser.add_argument('--B_exp', type=int,
                         help='Exponent of the number of bins', required=True)
+    parser.add_argument('--num-exp', type=int,
+                        help='Number of experiments', required=False, default=200)
     return parser.parse_args()
 
 
@@ -54,7 +56,7 @@ with open(f'{folder_name}/pareto_bins.pkl', 'rb') as f:
 eps_list = np.geomspace(0.1, 5, 10)  # list of privacy budgets
 target = 0.5
 replacement = False  # sample without replacement
-num_exp = 200  # number of experiments
+num_exp = args.num_exp  # number of experiments
 
 # ------------Hierarchical Mechanism------------#
 print("Hierarchical Mechanism")

@@ -35,6 +35,8 @@ def parse_arguments():
                         help='Exponent of the number of bins', required=True)
     parser.add_argument('--delta', type=float,
                         help='Delta parameter for shuffle differential privacy', required=False)
+    parser.add_argument('--num-exp', type=int,
+                        help='Number of experiments', required=False, default=200)
     return parser.parse_args()
 
 
@@ -56,7 +58,7 @@ with open(f'{folder_name}/pareto_bins.pkl', 'rb') as f:
 eps_list = np.geomspace(0.1, 5, 10)  # list of privacy budgets
 target = 0.5
 replacement = False  # sample without replacement
-num_exp = 200  # number of experiments
+num_exp = args.num_exp  # number of experiments
 coins = bins
 
 # ------------Noisy Binary Search------------#
