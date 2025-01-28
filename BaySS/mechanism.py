@@ -59,6 +59,7 @@ def bayss_dp(data: list,
     gamma = 1 / (np.log(B) ** 2)  # as proposed in the reference paper
 
     # get the intervals from the Bayesian learning
+    initial_len = len(data)
     R, data = reduction_to_gamma(data=data,
                                  alpha_update=alpha_update,
                                  M=M_bayes_1,
@@ -67,6 +68,7 @@ def bayss_dp(data: list,
                                  target=target,
                                  gamma=gamma,
                                  eps=eps)
+    assert len(data) == initial_len - M_bayes_1, "The number of elements in the dataset must be equal to M "
 
     if len(R) > 13:
         # Apply again the Bayesian learning
@@ -81,6 +83,7 @@ def bayss_dp(data: list,
         R = np.insert(R, len(R), [max_R, intervals[-1][1]], axis=0)
 
         gamma = 1 / 13
+        initial_len = len(data)
         R, data = reduction_to_gamma(data=data,
                                      alpha_update=alpha_update,
                                      M=M_bayes_2,
@@ -89,6 +92,7 @@ def bayss_dp(data: list,
                                      target=target,
                                      gamma=gamma,
                                      eps=eps)
+        assert len(data) == initial_len - M_bayes_2, "The number of elements in the dataset must be equal to M"
 
     if test:
         if flag:

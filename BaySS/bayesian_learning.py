@@ -38,9 +38,9 @@ def bayes_learn(data: list,
 
     if not replacement:
         # generate a random permutation of the data indices
-        data_to_use = np.random.permutation(data)
-        data_to_use = data_to_use[:M]  # data to use for bayes learning
-        data_not_used = data_to_use[M:]  # data not used
+        data = np.random.permutation(data)
+        data_to_use = data[:M]  # data to use for bayes learning
+        data_not_used = data[M:]  # data not used
     else:
         indices = np.random.choice(len(data), M, replace=True)  # generate M random indices with replacement
         data_to_use = data[indices]  # data to use for bayes learning
